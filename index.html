@@ -409,8 +409,8 @@
         }
 
         function getStabilityClass(remainingDice) {
-            if (remainingDice <= 20) return 'stability-critical';
-            if (remainingDice <= 50) return 'stability-warning';
+            if (remainingDice <= 5) return 'stability-critical';
+            if (remainingDice <= 30) return 'stability-warning';
             return 'stability-safe';
         }
 
