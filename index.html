@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 90vh;
+        }
+        .fate-panel, .journal-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .fate-panel {
+            flex: 1;
+        }
+        .journal-panel {
+            flex: 2;
+        }
+        .dice-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .die {
+            width: 60px;
+            height: 60px;
+            background: #f8f8f8;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        button {
+            background: #4a4a4a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        button:hover {
+            background: #666;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        #journal {
+            width: 100%;
+            height: calc(100% - 60px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+            font-family: inherit;
+            line-height: 1.6;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .card-display {
+            min-height: 40px;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .save-section {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        .save-button {
+            flex: 1;
+            background: #4CAF50;
+        }
+        .auto-save-indicator {
+            padding: 5px;
+            color: #666;
+            font-size: 0.8em;
+            text-align: right;
+        }
+        .card-history {
+            margin-top: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            background: #f8f8f8;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .card-history-item {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9em;
+            display: flex;
+            justify-content: space-between;
+        }
+        .card-history-item:last-child {
+            border-bottom: none;
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .clear-history {
+            font-size: 0.8em;
+            padding: 3px 8px;
+            background: #ff4444;
+        }
+        .red-card {
+            color: #ff0000;
+        }
+        .instructions-panel {
+            background: #fffdf7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #e0dcd0;
+        }
+        .dice-pool-info {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            padding: 5px;
+            background: #f8f8f8;
+            border-radius: 3px;
+        }
+        .stability-critical {
+            color: #ff4444;
+            font-weight: bold;
+        }
+        .stability-warning {
+            color: #ff8c00;
+        }
+        .stability-safe {
+            color: #4CAF50;
+        }
+        .collapse-message {
+            color: #ff4444;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+            padding: 20px;
+            background: #fff8f8;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 2px solid #ff4444;
+        }
+        .narrative-message {
+            font-style: italic;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .safe-message {
+            background: #f0f8f0;
+            color: #2e7d32;
+        }
+        .warning-message {
+            background: #fff3e0;
+            color: #ef6c00;
+        }    
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="fate-panel">
+            <h2>Fate</h2>
+            
+            <div class="section">
+                <h3>Roll 2d6</h3>
+                <div class="dice-container">
+                    <div class="die" id="die1">-</div>
+                    <div class="die" id="die2">-</div>
+                </div>
+                <button onclick="rollDice()">Roll Dice</button>
+                <div class="result" id="diceResult">Total: -</div>
+            </div>
+
+            <div class="section">
+                <h3>Draw Card</h3>
+                <button onclick="drawCard()">Draw Card</button>
+                <div class="card-display" id="cardResult">No card drawn</div>
+                <div class="deck-info">
+                    <span id="remainingCards"></span>
+                    <button onclick="reshuffleDeck()" id="reshuffleButton" style="display: none;">Reshuffle Deck</button>
+                </div>
+                <div class="history-header">
+                    <h4>Card History</h4>
+                    <button class="clear-history" onclick="clearHistory()">Clear</button>
+                </div>
+                <div class="card-history" id="cardHistory"></div>
+            </div>
+
+            <div class="section">
+                <h3>Tower Pull</h3>
+                <button onclick="towerPull()" id="pullButton">Pull Block</button>
+                <div class="result" id="towerResult" class="narrative-message">The tower stands steady, waiting for the first pull...</div>
+                <div class="dice-pool-info" id="dicePoolInfo"></div>
+            </div>
+        
+        </div>
+
+        <div class="journal-panel">
+            <div class="instructions-panel">
+                <h2>Wretched & Alone</h2>
+                <div id="instructions">
+                    This site is meant to help you play solo journaling RPGs made using the 'Wretched & Alone' system.
+                      <select id="gameSelector" onchange="openGameWindow()">
+        <option value="">Select a game...</option>
+        <option value="/Whoever Finds This Paper v1.0 S Graham.pdf">Whoever Finds This Paper v1 by S Graham</option>
+        <option value="/game2/index.html">Game 2</option>
+    </select> 
+                </div>
+            </div>
+            <h2>Journal</h2>
+            <div class="auto-save-indicator" id="saveIndicator"></div>
+            <textarea id="journal" placeholder="Record your adventure here..." oninput="autoSave()"></textarea>
+            <div class="save-section">
+                <button class="save-button" onclick="downloadJournal()">Save to File</button>
+                <button class="save-button" onclick="loadFile()">Load File</button>
+            </div>
+            <input type="file" id="fileInput" style="display: none;" onchange="handleFileLoad(event)">
+        </div>
+    </div>
+
+    <script>
+        function openGameWindow() {
+        const selector = document.getElementById('gameSelector');
+        const selectedValue = selector.value;
+        
+        if (selectedValue) {
+            window.open(selectedValue, '_blank');
+            selector.selectedIndex = 0; // Reset the selection
+        }
+    }
+
+        // Dice Rolling
+        function rollDice() {
+            const die1 = Math.floor(Math.random() * 6) + 1;
+            const die2 = Math.floor(Math.random() * 6) + 1;
+            document.getElementById('die1').textContent = die1;
+            document.getElementById('die2').textContent = die2;
+            document.getElementById('diceResult').textContent = `Total: ${die1 + die2}`;
+        }
+
+        // Card Drawing with History
+        let deck = [];
+        let cardHistory = [];
+        const maxHistoryLength = 50;
+
+        function initializeDeck() {
+            const suits = ['♠', '♣', '♥', '♦'];
+            const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+            deck = [];
+            for (let suit of suits) {
+                for (let value of values) {
+                    deck.push(`${value}${suit}`);
+                }
+            }
+            updateDeckInfo();
+        }
+
+        function drawCard() {
+            if (deck.length === 0) {
+                document.getElementById('reshuffleButton').style.display = 'block';
+                document.getElementById('cardResult').textContent = 'Deck is empty! Please reshuffle.';
+                return;
+            }
+            
+            const randomIndex = Math.floor(Math.random() * deck.length);
+            const card = deck.splice(randomIndex, 1)[0];
+            const timestamp = new Date().toLocaleTimeString();
+            
+            // Add to history
+            cardHistory.unshift({
+                card: card,
+                timestamp: timestamp,
+                remainingCards: deck.length
+            });
+            
+            // Limit history length
+            if (cardHistory.length > maxHistoryLength) {
+                cardHistory.pop();
+            }
+            
+            // Update display
+            document.getElementById('cardResult').textContent = card;
+            updateDeckInfo();
+            updateHistoryDisplay();
+            
+            // Save history to localStorage
+            localStorage.setItem('cardHistory', JSON.stringify(cardHistory));
+        }
+
+        function reshuffleDeck() {
+            initializeDeck();
+            document.getElementById('reshuffleButton').style.display = 'none';
+            document.getElementById('cardResult').textContent = 'Deck reshuffled';
+            updateHistoryDisplay();
+        }
+
+        function updateDeckInfo() {
+            document.getElementById('remainingCards').textContent = 
+                `Remaining cards: ${deck.length}/52`;
+        }
+
+        function updateHistoryDisplay() {
+            const historyDiv = document.getElementById('cardHistory');
+            historyDiv.innerHTML = '';
+            
+            cardHistory.forEach(entry => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'card-history-item';
+                
+                // Check if card is red (hearts or diamonds)
+                const isRed = entry.card.includes('♥') || entry.card.includes('♦');
+                const cardSpan = document.createElement('span');
+                cardSpan.textContent = entry.card;
+                if (isRed) cardSpan.className = 'red-card';
+                
+                const timeSpan = document.createElement('span');
+                timeSpan.textContent = entry.timestamp;
+                
+                historyItem.appendChild(cardSpan);
+                historyItem.appendChild(timeSpan);
+                historyDiv.appendChild(historyItem);
+            });
+        }
+
+        function clearHistory() {
+            cardHistory = [];
+            updateHistoryDisplay();
+            localStorage.setItem('cardHistory', JSON.stringify(cardHistory));
+        }
+
+        // Jenga Simulation
+        const safeMessages = [
+            "The tower wobbles, but is ok",
+            "The tower shifts slightly as you pull out the block",
+            "The tower leans somewhat, but remains stable",
+            "A gentle sway, but the tower holds firm",
+            "The blocks settle into their new position",
+            "The tower adjusts to the change with minimal movement",
+            "A successful pull, the tower barely notices"
+        ];
+
+        const dangerMessages = [
+            "The tower is leaning quite dangerously",
+            "The tower sways as you touch it",
+            "The tower is in imminent danger of collapse",
+            "The structure groans under its own weight",
+            "The blocks shift precariously",
+            "Each movement threatens to bring it all down",
+            "The tower teeters on the edge of disaster"
+        ];
+
+        function getRandomMessage(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        let dicePool = 100;
+
+        function rollDicePool() {
+            let ones = 0;
+            for (let i = 0; i < dicePool; i++) {
+                if (Math.floor(Math.random() * 6) + 1 === 1) {
+                    ones++;
+                }
+            }
+            return ones;
+        }
+
+        function getStabilityClass(remainingDice) {
+            if (remainingDice <= 20) return 'stability-critical';
+            if (remainingDice <= 50) return 'stability-warning';
+            return 'stability-safe';
+        }
+
+        function towerPull() {
+            if (dicePool <= 0) {
+                showGameEnd();
+                return;
+            }
+
+            const removedDice = rollDicePool();
+            dicePool -= removedDice;
+
+            if (dicePool <= 20) {
+                showGameEnd();
+                return;
+            }
+
+            const messageElement = document.getElementById('towerResult');
+            if (dicePool > 50) {
+                messageElement.className = 'narrative-message safe-message';
+                messageElement.textContent = getRandomMessage(safeMessages);
+            } else {
+                messageElement.className = 'narrative-message warning-message';
+                messageElement.textContent = getRandomMessage(dangerMessages);
+            }
+
+            const stabilityClass = getStabilityClass(dicePool);
+            document.getElementById('dicePoolInfo').innerHTML =
+                `<span class="${stabilityClass}">Stability Level: ${dicePool > 50 ? 'Stable' : 'Unstable'}</span>`;
+
+            localStorage.setItem('towerState', JSON.stringify({
+                dicePool: dicePool,
+                messageState: messageElement.textContent
+            }));
+        }
+
+        function showGameEnd() {
+            document.getElementById('towerResult').innerHTML = 
+                '<div class="collapse-message">The tower groans one final time before cascading down in a thunderous crash! Game Over.</div>';
+            document.getElementById('dicePoolInfo').innerHTML = '';
+            document.getElementById('pullButton').disabled = true;
+            
+            const resetButton = document.createElement('button');
+            resetButton.onclick = resetTower;
+            resetButton.textContent = 'Build New Tower';
+            resetButton.style.marginTop = '20px';
+            document.getElementById('towerResult').appendChild(resetButton);
+        }
+
+        function resetTower() {
+            dicePool = 100;
+            document.getElementById('towerResult').className = 'narrative-message safe-message';
+            document.getElementById('towerResult').textContent = 'A fresh tower stands before you, solid and stable.';
+            document.getElementById('dicePoolInfo').innerHTML = 
+                `<span class="stability-safe">Stability Level: Stable</span>`;
+            document.getElementById('pullButton').disabled = false;
+            
+            localStorage.setItem('towerState', JSON.stringify({
+                dicePool: dicePool,
+                messageState: 'A fresh tower stands before you, solid and stable.'
+            }));
+        }
+
+        // Journal Auto-save
+        let saveTimeout;
+        
+        function autoSave() {
+            clearTimeout(saveTimeout);
+            document.getElementById('saveIndicator').textContent = 'Saving...';
+            
+            saveTimeout = setTimeout(() => {
+                const text = document.getElementById('journal').value;
+                localStorage.setItem('journalContent', text);
+                
+                const now = new Date().toLocaleTimeString();
+                document.getElementById('saveIndicator').textContent = `Last auto-saved at ${now}`;
+            }, 1000);
+        }
+
+        // Function to download journal as a file
+        function downloadJournal() {
+            const text = document.getElementById('journal').value;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            a.href = url;
+            a.download = `rpg-journal-${timestamp}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Function to trigger file input
+        function loadFile() {
+            document.getElementById('fileInput').click();
+        }
+
+        // Function to handle file loading
+        function handleFileLoad(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('journal').value = e.target.result;
+                    autoSave(); // Save the loaded content to localStorage
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        // Window load handler to restore state
+        window.onload = function() {
+            const savedTowerState = localStorage.getItem('towerState');
+            if (savedTowerState) {
+                const state = JSON.parse(savedTowerState);
+                dicePool = state.dicePool;
+                if (dicePool <= 20) {
+                    showGameEnd();
+                } else {
+                    const messageElement = document.getElementById('towerResult');
+                    messageElement.textContent = state.messageState || 'The tower stands steady...';
+                    messageElement.className = `narrative-message ${dicePool > 50 ? 'safe-message' : 'warning-message'}`;
+                    const stabilityClass = getStabilityClass(dicePool);
+                    document.getElementById('dicePoolInfo').innerHTML =
+                        `<span class="${stabilityClass}">Stability Level: ${dicePool > 50 ? 'Stable' : 'Unstable'}</span>`;
+                }
+            } else {
+                resetTower();
+            }
+            
+            initializeDeck();
+
+            const savedJournal = localStorage.getItem('journalContent');
+            if (savedJournal) {
+                document.getElementById('journal').value = savedJournal;
+            }
+
+            const savedCardHistory = localStorage.getItem('cardHistory');
+            if (savedCardHistory) {
+                cardHistory = JSON.parse(savedCardHistory);
+                updateHistoryDisplay();
+            }
+        };
+    </script>
+</body>
+</html>
