@@ -22,7 +22,7 @@
             gap: 20px;
             max-width: 1200px;
             margin: 0 auto;
-            height: 90vh;
+            height: 140vh;
         }
         .fate-panel, .journal-panel {
             background: white;
@@ -73,7 +73,7 @@
             border-radius: 5px;
         }
         #journal {
-            width: 100%;
+            width: 97%;
             height: calc(80% - 60px);
             padding: 10px;
             border: 1px solid #ddd;
@@ -195,7 +195,38 @@
         .warning-message {
             background: #fff3e0;
             color: #ef6c00;
-        }    
+        }
+        .salvation-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.salvation-value {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.salvation-value button {
+    width: 30px;
+    padding: 5px;
+    margin: 0;
+}
+
+.salvation-value span {
+    font-size: 1.2em;
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
+}
+
+.salvation-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}    
     </style>
 </head>
 <body>
@@ -234,6 +265,26 @@
                 <div class="result" id="towerResult" class="narrative-message">The tower stands steady, waiting for the first pull...</div>
                 <div class="dice-pool-info" id="dicePoolInfo"></div>
             </div>
+
+            <div class="section">
+    <h3>Salvation (Ace of Hearts)</h3>
+    <div class="salvation-controls">
+        <div class="salvation-value">
+            <button onclick="adjustSalvation(-1)">-</button>
+            <span id="salvationValue">10</span>
+            <button onclick="adjustSalvation(1)">+</button>
+        </div>
+        <div class="salvation-checkbox">
+            <input type="checkbox" id="countUp">
+            <label for="countUp">Count up?</label>
+        </div>
+    </div>
+    <div class="dice-container">
+        <div class="die" id="salvationDie">-</div>
+    </div>
+    <button onclick="rollSalvationDie()">Roll Die</button>
+    <div class="result" id="salvationResult">Ready to roll...</div>
+</div>
         
         </div>
 
@@ -537,6 +588,35 @@
             }
         }
 
+let salvationValue = 10;
+
+function adjustSalvation(amount) {
+    salvationValue += amount;
+    document.getElementById('salvationValue').textContent = salvationValue;
+    localStorage.setItem('salvationValue', salvationValue);
+}
+
+function rollSalvationDie() {
+    const dieResult = Math.floor(Math.random() * 6) + 1;
+    document.getElementById('salvationDie').textContent = dieResult;
+    
+    const countUp = document.getElementById('countUp').checked;
+    const resultElement = document.getElementById('salvationResult');
+    
+    if (dieResult === 6) {
+        if (countUp) {
+            adjustSalvation(1);
+            resultElement.textContent = 'Rolled a 6! Chances of salvation increase';
+        } else {
+            adjustSalvation(-1);
+            resultElement.textContent = 'Rolled a 6! Chances of salvation increase';
+        }
+    } else {
+        resultElement.textContent = `Rolled a ${dieResult}. Your chances remain...unchanged.`;
+    }
+}
+
+
         // Window load handler to restore state
         window.onload = function() {
             const savedTowerState = localStorage.getItem('towerState');
@@ -569,7 +649,13 @@
                 cardHistory = JSON.parse(savedCardHistory);
                 updateHistoryDisplay();
             }
+            const savedSalvationValue = localStorage.getItem('salvationValue');
+if (savedSalvationValue !== null) {
+    salvationValue = parseInt(savedSalvationValue);
+    document.getElementById('salvationValue').textContent = salvationValue;
+}
         };
+
     </script>
 </body>
 </html>
