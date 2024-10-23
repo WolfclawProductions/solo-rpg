@@ -379,7 +379,12 @@
             "A gentle sway, but the tower holds firm",
             "The blocks settle into their new position",
             "The tower adjusts to the change with minimal movement",
-            "A successful pull, the tower barely notices"
+            "A successful pull, the tower barely notices",
+            "Nothing much happens - for now",
+            "Phew, all is ok",
+            "It wobbles a bit, but settles",
+            "Easy peasy"
+            "Nicely done. The tower is structurally sound, still"
         ];
 
         const dangerMessages = [
@@ -389,7 +394,15 @@
             "The structure groans under its own weight",
             "The blocks shift precariously",
             "Each movement threatens to bring it all down",
-            "The tower teeters on the edge of disaster"
+            "The tower teeters on the edge of disaster",
+            "Your hands shake as you pull the block free",
+            "Your hand slipped, knocking some blocks askew. Careful!",
+            "Things are starting to get dangerous",
+            "Gently... gently dammit!",
+            "The blocks are barely carrying the weight",
+            "Watch out, things are getting dicey",
+            "Pull... careful, careful! The tower shifts as you pull",
+            "Hold your breath, anything could bring it down it seems"
         ];
 
         function getRandomMessage(array) {
@@ -423,7 +436,7 @@
             const removedDice = rollDicePool();
             dicePool -= removedDice;
 
-            if (dicePool <= 5) {
+            if (dicePool <= 0) {
                 showGameEnd();
                 return;
             }
