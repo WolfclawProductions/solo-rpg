@@ -635,10 +635,7 @@ function adjustAuthority(amount) {
     localStorage.setItem('authorityValue', authorityValue);
 }
 
-// Add this to the window.onload function
-window.onload = function() {
-    // ... existing onload code ...
-    
+window.onload = function() {    
     const savedAuthorityValue = localStorage.getItem('authorityValue');
     if (savedAuthorityValue !== null) {
         authorityValue = parseInt(savedAuthorityValue);
