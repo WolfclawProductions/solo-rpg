@@ -227,6 +227,17 @@
     align-items: center;
     gap: 5px;
 }    
+<div class="section">
+    <h3>Authority Counter</h3>
+    <p>Track your authority level here.</p>
+    <div class="salvation-controls">
+        <div class="salvation-value">
+            <button onclick="adjustAuthority(-1)">-</button>
+            <span id="authorityValue">10</span>
+            <button onclick="adjustAuthority(1)">+</button>
+        </div>
+    </div>
+</div>        
     </style>
 </head>
 <body>
@@ -616,7 +627,24 @@ function rollSalvationDie() {
         resultElement.textContent = `Rolled a ${dieResult}. Your chances remain...unchanged.`;
     }
 }
+let authorityValue = 10;
 
+function adjustAuthority(amount) {
+    authorityValue += amount;
+    document.getElementById('authorityValue').textContent = authorityValue;
+    localStorage.setItem('authorityValue', authorityValue);
+}
+
+// Add this to the window.onload function
+window.onload = function() {
+    // ... existing onload code ...
+    
+    const savedAuthorityValue = localStorage.getItem('authorityValue');
+    if (savedAuthorityValue !== null) {
+        authorityValue = parseInt(savedAuthorityValue);
+        document.getElementById('authorityValue').textContent = authorityValue;
+    }
+    };
 
         // Window load handler to restore state
         window.onload = function() {
