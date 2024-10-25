@@ -17,30 +17,34 @@
  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
  overflow-x: hidden;
 }
-        .container {
-            display: flex;
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 140vh;
-        }
-        .fate-panel, .journal-panel {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .fate-panel {
-            flex: 1;
-        }
-        .journal-panel {
-            flex: 2;
-        }
-        .dice-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+.container {
+    display: flex;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: flex-start;
+    position: relative;
+}
+
+.fate-panel, .journal-panel {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 20px;
+}
+
+.fate-panel {
+    flex: 1;
+    align-self: flex-start;
+}
+
+.journal-panel {
+    flex: 2;
+    height: calc(100vh - 40px);
+    overflow-y: auto;
+}
         .die {
             width: 60px;
             height: 60px;
