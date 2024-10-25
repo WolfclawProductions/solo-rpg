@@ -633,8 +633,6 @@ function adjustAuthority(amount) {
     document.getElementById('authorityValue').textContent = authorityValue;
     localStorage.setItem('authorityValue', authorityValue);
 }
-        }
-
         // Window load handler to restore state
         window.onload = function() {
             const savedTowerState = localStorage.getItem('towerState');
@@ -672,8 +670,8 @@ if (savedSalvationValue !== null) {
     salvationValue = parseInt(savedSalvationValue);
     document.getElementById('salvationValue').textContent = salvationValue;
 }
-            window.onload = function() {
-    // ... existing onload code ...
+            
+window.onload = function() {
     
     const savedAuthorityValue = localStorage.getItem('authorityValue');
     if (savedAuthorityValue !== null) {
