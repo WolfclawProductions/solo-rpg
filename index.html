@@ -10,13 +10,230 @@
  width: 100%;
  overflow-x: hidden;
 }
- body {
+        body {
  margin: 20px;
  height: 100%;
  width: 100%;
  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
  overflow-x: hidden;
 }
+.container {
+    display: flex;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    align-items: flex-start;
+    position: relative;
+    height: calc(100vh - 40px);
+}
+
+.fate-panel, .journal-panel {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+}
+
+.fate-panel {
+    flex: 0 0 400px;  /* Fixed width of 400px */
+}
+
+.journal-panel {
+    flex: 1;          /* Takes up remaining space */
+}
+
+        .dice-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .die {
+            width: 60px;
+            height: 60px;
+            background: #f8f8f8;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        button {
+            background: #4a4a4a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        button:hover {
+            background: #666;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 5px;
+        }
+        #journal {
+    height: calc(100% - 200px);  /* Adjust based on other elements in panel */
+    width: 100%;
+    max-width: none;
+}
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .card-display {
+            min-height: 40px;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .save-section {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        .save-button {
+            flex: 1;
+            background: #4CAF50;
+        }
+        .auto-save-indicator {
+            padding: 5px;
+            color: #666;
+            font-size: 0.8em;
+            text-align: right;
+        }
+        .card-history {
+            margin-top: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            background: #f8f8f8;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .card-history-item {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9em;
+            display: flex;
+            justify-content: space-between;
+        }
+        .card-history-item:last-child {
+            border-bottom: none;
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .clear-history {
+            font-size: 0.8em;
+            padding: 3px 8px;
+            background: #ff4444;
+        }
+        .red-card {
+            color: #ff0000;
+        }
+        .instructions-panel {
+            background: #fffdf7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #e0dcd0;
+        }
+        .dice-pool-info {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+            padding: 5px;
+            background: #f8f8f8;
+            border-radius: 3px;
+        }
+        .stability-critical {
+            color: #ff4444;
+            font-weight: bold;
+        }
+        .stability-warning {
+            color: #ff8c00;
+        }
+        .stability-safe {
+            color: #4CAF50;
+        }
+        .collapse-message {
+            color: #ff4444;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+            padding: 20px;
+            background: #fff8f8;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 2px solid #ff4444;
+        }
+        .narrative-message {
+            font-style: italic;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .safe-message {
+            background: #f0f8f0;
+            color: #2e7d32;
+        }
+        .warning-message {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+        .salvation-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.salvation-value {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.salvation-value button {
+    width: 30px;
+    padding: 5px;
+    margin: 0;
+}
+
+.salvation-value span {
+    font-size: 1.2em;
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
+}
+
+.salvation-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}    
+    </style>
+</head>
+<body>
     <div class="container">
         <!-- Fate Panel -->
         <div class="fate-panel">
@@ -111,6 +328,8 @@
             </div>
             <input type="file" id="fileInput" style="display: none;" onchange="handleFileLoad(event)">
         </div>
+    </div>
+
 
     <script>
         function openGameWindow() {
