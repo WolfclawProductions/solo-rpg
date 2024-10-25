@@ -226,38 +226,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-}   
-.authority-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.authority-value {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.authority-value button {
-    width: 30px;
-    padding: 5px;
-    margin: 0;
-}
-
-.authority-value span {
-    font-size: 1.2em;
-    font-weight: bold;
-    min-width: 30px;
-    text-align: center;
-}
-
-.sauthority-checkbox {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}   
+}    
     </style>
 </head>
 <body>
@@ -317,18 +286,9 @@
     <button onclick="rollSalvationDie()">Roll Die</button>
     <div class="result" id="salvationResult">Ready to roll...</div>
 </div>
-     <div class="section">
-    <h3>Authority</h3>
-    <p>This counter represents your Authority tokens.</p>
-    <div class="authority-controls">
-        <div class="authority-value">
-            <button onclick="adjustAuthority(-1)">-</button>
-            <span id="authorityValue">10</span>
-            <button onclick="adjustAuthority(1)">+</button>
+        
         </div>
 
-        </div>
-        
         <div class="journal-panel">
             <div class="instructions-panel">
                 <h2>Wretched & Alone Game Pad</h2>
@@ -629,7 +589,7 @@
             }
         }
 
-let salvationValue = 30;
+let salvationValue = 10;
 
 function adjustSalvation(amount) {
     salvationValue += amount;
@@ -655,14 +615,6 @@ function rollSalvationDie() {
     } else {
         resultElement.textContent = `Rolled a ${dieResult}. Your chances remain...unchanged.`;
     }
-
-let authorityValue = 10;
-
-function adjustAuthority(amount) {
-    authorityValue += amount;
-    document.getElementById('authorityValue').textContent = authorityValue;
-    localStorage.setItem('authorityValue', authorityValue);
-}
 }
 
 
@@ -702,11 +654,6 @@ function adjustAuthority(amount) {
 if (savedSalvationValue !== null) {
     salvationValue = parseInt(savedSalvationValue);
     document.getElementById('salvationValue').textContent = salvationValue;
-}
-            const savedAuthorityValue = localStorage.getItem('authorityValue');
-if (savedauthorityValue !== null) {
-    authorityValue = parseInt(savedauthorityValue);
-    document.getElementById('authorityValue').textContent = authorityValue;
 }
         };
 
