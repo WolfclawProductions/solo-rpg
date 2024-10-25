@@ -226,18 +226,8 @@
     display: flex;
     align-items: center;
     gap: 5px;
-}    
-<div class="section">
-    <h3>Authority Counter</h3>
-    <p>Track your authority level here.</p>
-    <div class="salvation-controls">
-        <div class="salvation-value">
-            <button onclick="adjustAuthority(-1)">-</button>
-            <span id="authorityValue">10</span>
-            <button onclick="adjustAuthority(1)">+</button>
-        </div>
-    </div>
-</div>        
+}   
+        
     </style>
 </head>
 <body>
@@ -297,6 +287,16 @@
     <button onclick="rollSalvationDie()">Roll Die</button>
     <div class="result" id="salvationResult">Ready to roll...</div>
 </div>
+            <div class="section">
+    <h3>Authority Counter</h3>
+    <p>Track your authority level here.</p>
+    <div class="salvation-controls">
+        <div class="salvation-value">
+            <button onclick="adjustAuthority(-1)">-</button>
+            <span id="authorityValue">10</span>
+            <button onclick="adjustAuthority(1)">+</button>
+        </div>
+    </div>
         
         </div>
 
