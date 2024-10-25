@@ -17,13 +17,15 @@
  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
  overflow-x: hidden;
 }
-        .container {
+.container {
     display: flex;
     gap: 20px;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
+    padding: 20px;
     align-items: flex-start;
     position: relative;
+    height: calc(100vh - 40px);
 }
 
 .fate-panel, .journal-panel {
@@ -31,20 +33,18 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 20px;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
 }
 
 .fate-panel {
-    flex: 1;
-    align-self: flex-start;
+    flex: 0 0 400px;  /* Fixed width of 400px */
 }
 
 .journal-panel {
-    flex: 2;
-    height: calc(100vh - 40px);
-    overflow-y: auto;
+    flex: 1;          /* Takes up remaining space */
 }
+
         .dice-container {
             display: flex;
             gap: 10px;
@@ -82,15 +82,10 @@
             border-radius: 5px;
         }
         #journal {
-            width: 97%;
-            height: calc(80% - 60px);
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            resize: none;
-            font-family: inherit;
-            line-height: 1.6;
-        }
+    height: calc(100% - 200px);  /* Adjust based on other elements in panel */
+    width: 100%;
+    max-width: none;
+}
         .section {
             margin-bottom: 30px;
             padding-bottom: 20px;
