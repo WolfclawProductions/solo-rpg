@@ -227,7 +227,6 @@
     align-items: center;
     gap: 5px;
 }   
-        
 .authority-controls {
     display: flex;
     justify-content: space-between;
@@ -254,17 +253,11 @@
     text-align: center;
 }
 
-.authority-checkbox {
+.sauthority-checkbox {
     display: flex;
     align-items: center;
     gap: 5px;
-}    
-.authortiy-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
+}   
     </style>
 </head>
 <body>
@@ -709,6 +702,11 @@ function adjustAuthority(amount) {
 if (savedSalvationValue !== null) {
     salvationValue = parseInt(savedSalvationValue);
     document.getElementById('salvationValue').textContent = salvationValue;
+}
+            const savedAuthorityValue = localStorage.getItem('authorityValue');
+if (savedauthorityValue !== null) {
+    authorityValue = parseInt(savedauthorityValue);
+    document.getElementById('authorityValue').textContent = authorityValue;
 }
         };
 
