@@ -226,7 +226,8 @@
     display: flex;
     align-items: center;
     gap: 5px;
-}    
+}   
+        
 .authority-controls {
     display: flex;
     justify-content: space-between;
@@ -635,7 +636,7 @@
             }
         }
 
-let salvationValue = 10;
+let salvationValue = 30;
 
 function adjustSalvation(amount) {
     salvationValue += amount;
@@ -661,6 +662,14 @@ function rollSalvationDie() {
     } else {
         resultElement.textContent = `Rolled a ${dieResult}. Your chances remain...unchanged.`;
     }
+
+let authorityValue = 10;
+
+function adjustAuthority(amount) {
+    authorityValue += amount;
+    document.getElementById('authorityValue').textContent = authorityValue;
+    localStorage.setItem('authorityValue', authorityValue);
+}
 }
 
 
