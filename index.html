@@ -17,14 +17,25 @@
  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
  overflow-x: hidden;
 }
-       .fate-panel, .journal-panel {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 20px;        
-}
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 140vh;
+        }
+        .fate-panel, .journal-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .fate-panel {
+            flex: 1;
+        }
+        .journal-panel {
+            flex: 2;
+        }
         .dice-container {
             display: flex;
             gap: 10px;
@@ -275,6 +286,7 @@
     <button onclick="rollSalvationDie()">Roll Die</button>
     <div class="result" id="salvationResult">Ready to roll...</div>
 </div>
+            
 <div class="section">
     <h3>Authority Counter</h3>
     <p>Track your authority level here.</p>
@@ -283,8 +295,8 @@
             <button onclick="adjustAuthority(-1)">-</button>
             <span id="authorityValue">10</span>
             <button onclick="adjustAuthority(1)">+</button>
-        </div>
-    </div>      
+        </div>            
+        
         </div>
 
         <div class="journal-panel">
@@ -614,14 +626,15 @@ function rollSalvationDie() {
         resultElement.textContent = `Rolled a ${dieResult}. Your chances remain...unchanged.`;
     }
 }
-let authorityValue = 10;
+        let authorityValue = 10;
 
 function adjustAuthority(amount) {
     authorityValue += amount;
     document.getElementById('authorityValue').textContent = authorityValue;
     localStorage.setItem('authorityValue', authorityValue);
-}        
-        
+}
+        }
+
         // Window load handler to restore state
         window.onload = function() {
             const savedTowerState = localStorage.getItem('towerState');
@@ -659,13 +672,15 @@ if (savedSalvationValue !== null) {
     salvationValue = parseInt(savedSalvationValue);
     document.getElementById('salvationValue').textContent = salvationValue;
 }
- window.onload = function() {
+            window.onload = function() {
+    // ... existing onload code ...
+    
     const savedAuthorityValue = localStorage.getItem('authorityValue');
     if (savedAuthorityValue !== null) {
         authorityValue = parseInt(savedAuthorityValue);
         document.getElementById('authorityValue').textContent = authorityValue;
     }
-        };
+};
 
     </script>
 </body>
